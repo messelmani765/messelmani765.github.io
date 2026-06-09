@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mohamed Amine Messelmani – Systèmes Embarqués & IA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #080c10;
+      --bg2: #0e1318;
+      --bg3: #141b22;
+      --accent: #00e5ff;
+      --accent2: #ff6b35;
+      --green: #39ff14;
+      --text: #e8edf2;
+      --muted: #7a8a99;
+      --border: rgba(0,229,255,0.12);
+      --card: rgba(14,19,24,0.9);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* GRID BACKGROUND */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* GLOW ORBS */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.18;
+    }
+    .orb1 { width: 600px; height: 600px; background: var(--accent); top: -200px; left: -200px; }
+    .orb2 { width: 400px; height: 400px; background: var(--accent2); bottom: -100px; right: -100px; }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 18px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(8,12,16,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    /* MAIN CONTENT */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 80px;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 4px 12px;
+      border-radius: 2px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(40px, 7vw, 80px);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      animation: fadeUp 0.8s 0.1s ease both;
+    }
+
+    .hero h1 span { color: var(--accent); }
+
+    .hero-sub {
+      font-size: 16px;
+      color: var(--muted);
+      margin-top: 20px;
+      max-width: 520px;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .hero-contacts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 36px;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .contact-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 12px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .contact-pill:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .contact-pill .icon { font-size: 14px; }
+
+    /* SECTIONS */
+    section {
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .section-num {
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+    }
+
+    .section-header h2 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 28px;
+      letter-spacing: -0.01em;
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ABOUT */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .about-text {
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.8;
+    }
+
+    .about-text strong { color: var(--accent); font-weight: 500; }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 20px;
+    }
+
+    .stat-card .num {
+      font-family: 'Syne', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .stat-card .label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 4px;
+    }
+
+    /* EXPERIENCE */
+    .exp-item {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 32px;
+      margin-bottom: 40px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .exp-item:last-child { border-bottom: none; margin-bottom: 0; }
+
+    .exp-meta .date {
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .exp-meta .company {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      margin-top: 8px;
+      color: var(--text);
+    }
+
+    .exp-meta .location {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .exp-content .role {
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 18px;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .exp-content ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .exp-content ul li {
+      display: flex;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .exp-content ul li::before {
+      content: '›';
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .exp-content ul li strong { color: var(--text); font-weight: 500; }
+
+    /* PROJECTS */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .project-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      transition: border-color 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+
+    .project-card:hover {
+      border-color: rgba(0,229,255,0.3);
+      transform: translateY(-3px);
+    }
+
+    .project-card:hover::before { transform: scaleX(1); }
+
+    .project-icon { font-size: 28px; margin-bottom: 12px; }
+
+    .project-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .project-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      padding: 3px 8px;
+      border-radius: 2px;
+      border: 1px solid rgba(0,229,255,0.2);
+      color: var(--accent);
+      background: rgba(0,229,255,0.05);
+    }
+
+    .tag.orange {
+      border-color: rgba(255,107,53,0.3);
+      color: var(--accent2);
+      background: rgba(255,107,53,0.05);
+    }
+
+    .tag.green {
+      border-color: rgba(57,255,20,0.3);
+      color: var(--green);
+      background: rgba(57,255,20,0.05);
+    }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .skill-group h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .skill-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .skill-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text);
+    }
+
+    .skill-bar {
+      width: 80px;
+      height: 3px;
+      background: var(--bg3);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .skill-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 2px;
+      transform-origin: left;
+      animation: barGrow 1s ease both;
+    }
+
+    /* EDUCATION */
+    .edu-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 32px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .edu-year {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+
+    .edu-content h3 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .edu-content .school {
+      font-size: 13px;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .edu-modules {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .edu-module {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 2px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    /* CERT */
+    .cert-card {
+      background: var(--bg2);
+      border: 1px solid rgba(57,255,20,0.2);
+      border-radius: 8px;
+      padding: 28px;
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    .cert-badge {
+      font-size: 36px;
+      flex-shrink: 0;
+    }
+
+    .cert-content h3 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 17px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .cert-issuer {
+      font-size: 12px;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes barGrow {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+      main { padding: 0 20px; }
+      .about-grid { grid-template-columns: 1fr; }
+      .exp-item { grid-template-columns: 1fr; gap: 12px; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .edu-card { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 36px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+
+  <nav>
+    <div class="nav-logo">M.A. Messelmani</div>
+    <ul class="nav-links">
+      <li><a href="#about">Profil</a></li>
+      <li><a href="#experience">Expériences</a></li>
+      <li><a href="#projects">Projets</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#education">Formation</a></li>
+      <li><a href="https://github.com/messelmani765" target="_blank">GitHub ↗</a></li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-tag">Disponible · Ras Jebel, Tunisie</div>
+      <h1>Mohamed Amine<br><span>Messelmani</span></h1>
+      <p class="hero-sub">Étudiant EEA · Systèmes Embarqués · IA embarquée · IoT<br>
+      Deux stages été 2025 · Certifié Deep Learning PyTorch</p>
+      <div class="hero-contacts">
+        <a href="tel:+21629329013" class="contact-pill"><span class="icon">📞</span> 29 329 013</a>
+        <a href="mailto:mohamedaminemesselmani0@gmail.com" class="contact-pill"><span class="icon">✉️</span> Email</a>
+        <a href="https://github.com/messelmani765" target="_blank" class="contact-pill"><span class="icon">🐙</span> GitHub</a>
+        <a href="#" class="contact-pill"><span class="icon">📍</span> Ras Jebel, Bizerte</a>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2>Profil</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="about-grid fade-in">
+        <div class="about-text">
+          <p>Étudiant en <strong>EEA (Électronique, Électrotechnique & Automatique)</strong> à l'ISSAT Sousse, passionné par l'<strong>IA embarquée</strong>, la <strong>computer vision</strong> et l'<strong>IoT</strong>.</p>
+          <br>
+          <p>J'aime concevoir des systèmes intelligents à fort impact réel — du capteur à l'interface, en passant par le modèle IA. Deux stages réalisés été 2025 : une <strong>startup IoT</strong> (Raspberry Pi, LoRa, YOLO v8) et l'industrie automobile chez <strong>Yazaki</strong>.</p>
+          <br>
+          <p>Certifié <strong>Deep Learning with PyTorch</strong> sur DataCamp. Motivé à concevoir des systèmes embarqués intelligents à fort impact environnemental et social.</p>
+        </div>
+        <div class="about-stats">
+          <div class="stat-card">
+            <div class="num">2</div>
+            <div class="label">Stages 2025</div>
+          </div>
+          <div class="stat-card">
+            <div class="num">6+</div>
+            <div class="label">Projets réalisés</div>
+          </div>
+          <div class="stat-card">
+            <div class="num">1</div>
+            <div class="label">Certification</div>
+          </div>
+          <div class="stat-card">
+            <div class="num">20</div>
+            <div class="label">Ans · Bizerte, TN</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2>Expériences</h2>
+        <div class="section-line"></div>
+      </div>
+
+      <div class="exp-item fade-in">
+        <div class="exp-meta">
+          <div class="date">Été 2025 · 1 mois</div>
+          <div class="company">Smart for Green</div>
+          <div class="location">IoT / Incendies · Ras Jebel</div>
+        </div>
+        <div class="exp-content">
+          <div class="role">Stagiaire – Systèmes Embarqués & IoT</div>
+          <ul>
+            <li>Développement de <strong>nœuds IoT</strong> avec Raspberry Pi & LoRa-E5 pour détection d'incendies en forêt</li>
+            <li>Entraînement et déploiement d'un modèle <strong>YOLO v8</strong> sur Raspberry Pi (inférence embarquée temps réel)</li>
+            <li>Développement d'une <strong>application web & mobile</strong> pour visualisation et alertes automatiques</li>
+            <li>Intégration de capteurs : température, humidité, détection de fumée</li>
+          </ul>
+          <div class="tags" style="margin-top:16px">
+            <span class="tag">Raspberry Pi</span>
+            <span class="tag">LoRa-E5</span>
+            <span class="tag">YOLOv8</span>
+            <span class="tag orange">Python</span>
+            <span class="tag green">IoT</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-item fade-in">
+        <div class="exp-meta">
+          <div class="date">Été 2025 · 1 mois</div>
+          <div class="company">Yazaki</div>
+          <div class="location">Automobile · Bizerte, Tunisie</div>
+        </div>
+        <div class="exp-content">
+          <div class="role">Stagiaire Technicien – Électronique Industrie</div>
+          <ul>
+            <li>Gestion et maintenance des <strong>faisceaux électroniques</strong> pour véhicules Toyota</li>
+            <li>Diagnostic, test et réparation de systèmes embarqués industriels</li>
+            <li>Programmation de microcontrôleurs pour applications industrielles</li>
+          </ul>
+          <div class="tags" style="margin-top:16px">
+            <span class="tag">Microcontrôleurs</span>
+            <span class="tag">Systèmes embarqués</span>
+            <span class="tag orange">Industrie automobile</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2>Projets Phares</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="projects-grid">
+
+        <div class="project-card fade-in">
+          <div class="project-icon">🔒</div>
+          <div class="project-title">Amine Security</div>
+          <div class="project-desc">Reconnaissance faciale temps réel avec alertes Telegram Bot et ouverture automatique de porte.</div>
+          <div class="tags">
+            <span class="tag">Raspberry Pi 4</span>
+            <span class="tag">Edge Impulse</span>
+            <span class="tag orange">Python</span>
+            <span class="tag green">Telegram API</span>
+          </div>
+        </div>
+
+        <div class="project-card fade-in">
+          <div class="project-icon">🤖</div>
+          <div class="project-title">FireBot</div>
+          <div class="project-desc">Robot IA embarquée, ESP32-CAM + servomoteur, dashboard web temps réel, détection de flammes par IA.</div>
+          <div class="tags">
+            <span class="tag">ESP32</span>
+            <span class="tag">ESP32-CAM</span>
+            <span class="tag orange">IA embarquée</span>
+            <span class="tag green">WiFi</span>
+          </div>
+        </div>
+
+        <div class="project-card fade-in">
+          <div class="project-icon">🚗</div>
+          <div class="project-title">Voiture Robot – Deep Learning</div>
+          <div class="project-desc">Modèle PyTorch entraîné sur Roboflow/Kaggle, serveur Python temps réel, interface visualisation IA.</div>
+          <div class="tags">
+            <span class="tag">ESP32</span>
+            <span class="tag">PyTorch</span>
+            <span class="tag orange">Roboflow</span>
+            <span class="tag green">Python</span>
+          </div>
+        </div>
+
+        <div class="project-card fade-in">
+          <div class="project-icon">⚡</div>
+          <div class="project-title">Récupération Énergie Piézo</div>
+          <div class="project-desc">Système Raspberry Pi + capteurs piézoélectriques pour récupérer et stocker l'énergie mécanique dissipée.</div>
+          <div class="tags">
+            <span class="tag">Raspberry Pi</span>
+            <span class="tag green">Énergie verte</span>
+            <span class="tag">Capteurs</span>
+          </div>
+        </div>
+
+        <div class="project-card fade-in">
+          <div class="project-icon">📡</div>
+          <div class="project-title">Surveillance ESP32-CAM</div>
+          <div class="project-desc">Détection de mouvement PIR, capture image automatique, envoi photo vers Telegram.</div>
+          <div class="tags">
+            <span class="tag">ESP32-CAM</span>
+            <span class="tag">PIR Sensor</span>
+            <span class="tag green">Telegram Bot</span>
+          </div>
+        </div>
+
+        <div class="project-card fade-in">
+          <div class="project-icon">☀️</div>
+          <div class="project-title">Suivi Solaire + Puissance</div>
+          <div class="project-desc">Suivi automatique solaire, mesure tension/courant/puissance, interface web temps réel.</div>
+          <div class="tags">
+            <span class="tag">Servomoteurs</span>
+            <span class="tag orange">Capteurs</span>
+            <span class="tag green">Interface Web</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2>Compétences</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="skills-grid fade-in">
+        <div class="skill-group">
+          <h3>Embarqué & Hardware</h3>
+          <div class="skill-list">
+            <div class="skill-item"><span>ESP32 / Arduino</span><div class="skill-bar"><div class="skill-bar-fill" style="width:90%"></div></div></div>
+            <div class="skill-item"><span>Raspberry Pi</span><div class="skill-bar"><div class="skill-bar-fill" style="width:85%"></div></div></div>
+            <div class="skill-item"><span>STM32 / ARM</span><div class="skill-bar"><div class="skill-bar-fill" style="width:70%"></div></div></div>
+            <div class="skill-item"><span>LoRa-E5</span><div class="skill-bar"><div class="skill-bar-fill" style="width:75%"></div></div></div>
+            <div class="skill-item"><span>KiCad / PCB</span><div class="skill-bar"><div class="skill-bar-fill" style="width:65%"></div></div></div>
+            <div class="skill-item"><span>VHDL / FPGA</span><div class="skill-bar"><div class="skill-bar-fill" style="width:60%"></div></div></div>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>IA & Computer Vision</h3>
+          <div class="skill-list">
+            <div class="skill-item"><span>Python</span><div class="skill-bar"><div class="skill-bar-fill" style="width:85%"></div></div></div>
+            <div class="skill-item"><span>PyTorch / CNN</span><div class="skill-bar"><div class="skill-bar-fill" style="width:75%"></div></div></div>
+            <div class="skill-item"><span>YOLOv8</span><div class="skill-bar"><div class="skill-bar-fill" style="width:80%"></div></div></div>
+            <div class="skill-item"><span>Edge Impulse</span><div class="skill-bar"><div class="skill-bar-fill" style="width:70%"></div></div></div>
+            <div class="skill-item"><span>Roboflow</span><div class="skill-bar"><div class="skill-bar-fill" style="width:72%"></div></div></div>
+            <div class="skill-item"><span>Transfer Learning</span><div class="skill-bar"><div class="skill-bar-fill" style="width:68%"></div></div></div>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>Langages & Outils</h3>
+          <div class="skill-list">
+            <div class="skill-item"><span>C / C++</span><div class="skill-bar"><div class="skill-bar-fill" style="width:78%"></div></div></div>
+            <div class="skill-item"><span>MATLAB / Simulink</span><div class="skill-bar"><div class="skill-bar-fill" style="width:72%"></div></div></div>
+            <div class="skill-item"><span>Assembleur ARM</span><div class="skill-bar"><div class="skill-bar-fill" style="width:60%"></div></div></div>
+            <div class="skill-item"><span>HTML / CSS / JS</span><div class="skill-bar"><div class="skill-bar-fill" style="width:65%"></div></div></div>
+            <div class="skill-item"><span>Git / GitHub</span><div class="skill-bar"><div class="skill-bar-fill" style="width:75%"></div></div></div>
+            <div class="skill-item"><span>Linux</span><div class="skill-bar"><div class="skill-bar-fill" style="width:70%"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUCATION -->
+    <section id="education">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2>Formation</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="edu-card fade-in">
+        <div class="edu-year">Sept. 2024<br>— en cours</div>
+        <div class="edu-content">
+          <h3>Licence EEA – Électronique, Électrotechnique & Automatique</h3>
+          <div class="school">ISSAT Sousse · Université de Sousse</div>
+          <div class="edu-modules">
+            <span class="edu-module">Analyse & Algèbre</span>
+            <span class="edu-module">Traitement du signal</span>
+            <span class="edu-module">Z-Transform</span>
+            <span class="edu-module">Électronique analogique</span>
+            <span class="edu-module">Électronique numérique</span>
+            <span class="edu-module">VHDL / FPGA</span>
+            <span class="edu-module">Automatique 1 & 2</span>
+            <span class="edu-module">MATLAB / Simulink</span>
+            <span class="edu-module">Métrologie</span>
+            <span class="edu-module">Architecture ARM</span>
+            <span class="edu-module">Assembleur</span>
+            <span class="edu-module">Microcontrôleurs</span>
+            <span class="edu-module">Algorithmique</span>
+            <span class="edu-module">C / C++ / Python</span>
+            <span class="edu-module">Bases de données</span>
+            <span class="edu-module">Anglais technique</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 24px">
+        <div class="cert-card fade-in">
+          <div class="cert-badge">🏅</div>
+          <div class="cert-content">
+            <h3>Deep Learning with PyTorch – Image Processing & CNN</h3>
+            <div class="cert-issuer">DataCamp · Certification Officielle · 2025</div>
+            <div class="tags">
+              <span class="tag green">PyTorch</span>
+              <span class="tag green">CNN</span>
+              <span class="tag green">Transfer Learning</span>
+              <span class="tag">VGG16 / ResNet18</span>
+              <span class="tag">Faster R-CNN</span>
+              <span class="tag">Mask R-CNN</span>
+              <span class="tag">Segmentation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Mohamed Amine Messelmani · ISSAT Sousse · 
+      <a href="https://github.com/messelmani765" target="_blank">github.com/messelmani765</a> · 2025
+    </p>
+  </footer>
+
+  <script>
+    // Scroll fade-in
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
